@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<media>
+<mr-service id="TatFondBank_Currencies">
+    <language langid = "0x419">
+        <display-name>Татфондбанк. Курсы валют.</display-name>
+        <description>Татфондбанк. Курсы валют.</description>
+    </language>
+    <mr-file id = "courses">
+        <language langid = "0x419">
+            <file>courses.wav</file>
+            <display-name>Курс иностранной валюты...</display-name>
+            <description>Курс иностранной валюты и драг. металлов составляет</description>
+        </language>
+    </mr-file>
+    <mr-file id = "USD">
+        <language langid = "0x419">
+            <file>dollar.wav</file>
+            <display-name>USD</display-name>
+            <description>USD</description>
+        </language>
+    </mr-file>
+    <mr-file id = "EUR">
+        <language langid = "0x419">
+            <file>euro.wav</file>
+            <display-name>EUR</display-name>
+            <description>EUR</description>
+        </language>
+    </mr-file>
+    <mr-file id = "XAU">
+        <language langid = "0x419">
+            <file>gold.wav</file>
+            <display-name>XAU</display-name>
+            <description>XAU</description>
+        </language>
+    </mr-file>
+    <mr-file id = "XAG">
+        <language langid = "0x419">
+            <file>silver.wav</file>
+            <display-name>XAG</display-name>
+            <description>XAG</description>
+        </language>
+    </mr-file>
+
+    <mr-file id = "XPT">
+        <language langid = "0x419">
+            <file>platinum.wav</file>
+            <display-name>XPT</display-name>
+            <description>XPT</description>
+        </language>
+    </mr-file>
+
+    <mr-file id = "XPD">
+        <language langid = "0x419">
+            <file>palladium.wav</file>
+            <display-name>XPD</display-name>
+            <description>XPD</description>
+        </language>
+    </mr-file>
+    <mr-file id = "SELL">
+        <language langid = "0x419">
+            <file>sell.wav</file>
+            <display-name>Продажа</display-name>
+            <description>Продажа</description>
+        </language>
+    </mr-file>
+</mr-service>
+</media>

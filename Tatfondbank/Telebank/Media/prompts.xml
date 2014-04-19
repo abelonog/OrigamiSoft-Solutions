@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<media>
+<mr-service id="TatFondBank_Telebank">
+    <language langid = "0x419">
+        <display-name>Татфондбанк. Телебанк.</display-name>
+        <description>Татфондбанк. Телебанк.</description>
+    </language>
+
+<mr-file id="EntryMenu">
+	<language langid = "0x419">
+        	<file>EntryMenu.wav</file>
+		<display-name>Для уточнения баланса по карте нажмите 1 Для входа в ТФБ-консультант нажмите 2</display-name>
+		<description>Для уточнения баланса по карте нажмите 1 Для входа в ТФБ-консультант нажмите 2</description>
+	</language>
+</mr-file>
+
+<mr-file id="Info">
+	<language langid = "0x419">
+        	<file>Info.wav</file>
+		<display-name>Уважаемый клиент, сообщаем, что с первого ноября информация о балансе карты будет доступна только в системе ТФБ-консультант Для пользования сервисом ТФБ- консультант необходимо звонить с мобильного телефона </display-name>
+		<description>Уважаемый клиент, сообщаем, что с первого ноября информация о балансе карты будет доступна только в системе ТФБ-консультант Для пользования сервисом ТФБ- консультант необходимо звонить с мобильного телефона </description>
+	</language>
+</mr-file>
+
+<mr-file id="RegistrationMenu">
+	<language langid = "0x419">
+        	<file>RegistrationMenu.wav</file>
+		<display-name>Если Вы уже зарегистрированы в сервисе ТФБ-Консультант, нажмите 1 Для регистрации нажмите 2 Если Вы забыли свой пароль, нажмите 3 Для возврата в главное меню нажмите # </display-name>
+		<description>Если Вы уже зарегистрированы в сервисе ТФБ-Консультант, нажмите 1 Для регистрации нажмите 2 Если Вы забыли свой пароль, нажмите 3 Для возврата в главное меню нажмите # </description>
+	</language>
+</mr-file>
+
+<mr-file id="MobileRequired">
+	<language langid = "0x419">
+        	<file>MobileRequired.wav</file>
+		<display-name>Для работы в системе ТФБ-Консультант необходимо звонить с мобильного телефона </display-name>
+		<description>Для работы в системе ТФБ-Консультант необходимо звонить с мобильного телефона </description>
+	</language>
+</mr-file>
+
+<mr-file id="NotRegistered">
+	<language langid = "0x419">
+        	<file>NotRegistered.wav</file>
+		<display-name>Ваш номер не зарегистрирован в системе ТФБ-консультант. Пройдите регистрацию.</display-name>
+		<description>Ваш номер не зарегистрирован в системе ТФБ-консультант. Пройдите регистрацию.</description>
+	</language>
+</mr-file>
+
+<mr-file id="EnterPassword">
+	<language langid = "0x419">
+        	<file>EnterPassword.wav</file>
+		<display-name>Введите пароль</display-name>
+		<description>Введите пароль</description>
+	</language>
+</mr-file>
+
+<mr-file id="WrongPasswordEnterAgain">
+	<language langid = "0x419">
+        	<file>WrongPasswordEnterAgain.wav</file>
+		<display-name>Вы ввели пароль неверно. Для повторного ввода пароля нажмите 1. Если Вы забыли свой пароль, нажмите 2. </display-name>
+		<description>Вы ввели пароль неверно. Для повторного ввода пароля нажмите 1. Если Вы забыли свой пароль, нажмите 2. </description>
+	</language>
+</mr-file>
+
+<mr-file id="YourCallGoesToOpearator">
+	<language langid = "0x419">
+        	<file>YourCallGoesToOpearator.wav</file>
+		<display-name>Ваш звонок будет переведен на оператора</display-name>
+		<description>Ваш звонок будет переведен на оператора</description>
+	</language>
+</mr-file>
+
+<mr-file id="RegisterInfo">
+	<language langid = "0x419">
+        	<file>RegisterInfo.wav</file>
+		<display-name> Для регистрации Вам необходимо ввести последние 4 цифры номера любой Вашей карты и 10 цифр серии и номера Вашего паспорта </display-name>
+		<description> Для регистрации Вам необходимо ввести последние 4 цифры номера любой Вашей карты и 10 цифр серии и номера Вашего паспорта </description>
+	</language>
+</mr-file>
+
+<mr-file id="EnterCardDigits">
+	<language langid = "0x419">
+        	<file>EnterCardDigits.wav</file>
+		<display-name>Введите последние 4 цифры номера Вашей карты</display-name>
+		<description>Введите последние 4 цифры номера Вашей карты</description>
+	</language>
+</mr-file>
+
+<mr-file id="RepeatAttempt">
+	<language langid = "0x419">
+        	<file>RepeatAttempt.wav</file>
+		<display-name>Повторите попытку</display-name>
+		<description>Повторите попытку</description>
+	</language>
+</mr-file>
+
+<mr-file id="WrongData">
+	<language langid = "0x419">
+        	<file>WrongData.wav</file>
+		<display-name>Вы ввели неверные данные</display-name>
+		<description>Вы ввели неверные данные</description>
+	</language>
+</mr-file>
+
+<mr-file id="EnterPassportSeries">
+	<language langid = "0x419">
+        	<file>EnterPassportSeries.wav</file>
+		<display-name>Введите 4 цифры серии Вашего паспорта</display-name>
+		<description>Введите 4 цифры серии Вашего паспорта</description>
+	</language>
+</mr-file>
+
+<mr-file id="EnterPassportNumber">
+	<language langid = "0x419">
+        	<file>EnterPassportNumber.wav</file>
+		<display-name>Введите 6 цифр номера Вашего паспорта</display-name>
+		<description>Введите 6 цифр номера Вашего паспорта</description>
+	</language>
+</mr-file>
+
+<mr-file id="CompleteRegister">
+	<language langid = "0x419">
+        	<file>CompleteRegister.wav</file>
+		<display-name>Для завершения регистрации Вам необходимо ввести любую комбинацию из 3 цифр </display-name>
+		<description>Для завершения регистрации Вам необходимо ввести любую комбинацию из 3 цифр </description>
+	</language>
+</mr-file>
+
+<mr-file id="MainMenu">
+	<language langid = "0x419">
+        	<file>MainMenu.wav</file>
+		<display-name>Чтобы узнать баланс карты, нажмите 1 Если хотите изменить пароль для входа в ТФБ-Консультант, нажмите 2.Чтобы установить пин-код для карты полученной в магазинах-партнерах нажмите 3 Для выхода в главное меню нажмите # </display-name>
+		<description>Чтобы узнать баланс карты, нажмите 1 Если хотите изменить пароль для входа в ТФБ-Консультант, нажмите 2.Чтобы установить пин-код для карты полученной в магазинах-партнерах нажмите 3 Для выхода в главное меню нажмите # </description>
+	</language>
+</mr-file>
+
+<mr-file id="SystemUnresponsive">
+	<language langid = "0x419">
+        	<file>SystemUnresponsive.wav</file>
+		<display-name>К сожалению, не получилось получить ответа от системы. Повторите попытку позже. </display-name>
+		<description>К сожалению, не получилось получить ответа от системы. Повторите попытку позже. </description>
+	</language>
+</mr-file>
+
+<mr-file id="CardBalanceIs">
+	<language langid = "0x419">
+        	<file>CardBalanceIs.wav</file>
+		<display-name>Баланс карты составляет</display-name>
+		<description>Баланс карты составляет</description>
+	</language>
+</mr-file>
+
+<mr-file id="EnterNewPassword">
+	<language langid = "0x419">
+        	<file>EnterNewPassword.wav</file>
+		<display-name>Введите новый пароль из 3 цифр</display-name>
+		<description>Введите новый пароль из 3 цифр</description>
+	</language>
+</mr-file>
+
+<mr-file id="ReEnterNewPassword">
+	<language langid = "0x419">
+        	<file>ReEnterNewPassword.wav</file>
+		<display-name>Повторите ввод нового пароля</display-name>
+		<description>Повторите ввод нового пароля</description>
+	</language>
+</mr-file>
+
+<mr-file id="PasswordsDiffer">
+	<language langid = "0x419">
+        	<file>PasswordsDiffer.wav</file>
+		<display-name>Введеные вами пароли не совпадают. Пароль не был изменен.</display-name>
+		<description>Введеные вами пароли не совпадают. Пароль не был изменен.</description>
+	</language>
+</mr-file>
+
+<mr-file id="PasswordChanged">
+	<language langid = "0x419">
+        	<file>PasswordChanged.wav</file>
+		<display-name>Пароль успешно изменен</display-name>
+		<description>Пароль успешно изменен</description>
+	</language>
+</mr-file>
+
+<mr-file id="ChangePIN">
+	<language langid = "0x419">
+        	<file>ChangePIN.wav</file>
+		<display-name>Внимание! Вам нужно будет запомнить 4 цифры ПИН-кода, который Вы сейчас введете + пауза 3 с.</display-name>
+		<description>Внимание! Вам нужно будет запомнить 4 цифры ПИН-кода, который Вы сейчас введете + пауза 3 с.</description>
+	</language>
+</mr-file>
+
+<mr-file id="RepeatPIN">
+	<language langid = "0x419">
+        	<file>RepeatPIN.wav</file>
+		<display-name>Повторите ввод ПИН-кода</display-name>
+		<description>Повторите ввод ПИН-кода</description>
+	</language>
+</mr-file>
+
+<mr-file id="PINsDiffer">
+	<language langid = "0x419">
+        	<file>PINsDiffer.wav</file>
+		<display-name>Пинкоды не совпадают. Пожалуйста, повторите попытку ввода нового пинкода </display-name>
+		<description>Пинкоды не совпадают. Пожалуйста, повторите попытку ввода нового пинкода </description>
+	</language>
+</mr-file>
+
+<mr-file id="ChangePINSuccess">
+	<language langid = "0x419">
+        	<file>ChangePINSuccess.wav</file>
+		<display-name>ПИН-код успешно установлен. В целях безопасности никому его не сообщайте!</display-name>
+		<description>ПИН-код успешно установлен. В целях безопасности никому его не сообщайте!</description>
+	</language>
+</mr-file>
+
+<mr-file id="WrongCardNumber">
+	<language langid = "0x419">
+        	<file>WrongCardNumber.wav</file>
+		<display-name>вы ввели неверный номер карты</display-name>
+		<description>вы ввели неверный номер карты</description>
+	</language>
+</mr-file>
+
+<mr-file id="PINAlreadyChanged">
+	<language langid = "0x419">
+        	<file>PINAlreadyChanged.wav</file>
+		<display-name>По данной карте пин-код уже был установлен ранее</display-name>
+		<description>По данной карте пин-код уже был установлен ранее</description>
+	</language>
+</mr-file>
+</mr-service>
+</media>

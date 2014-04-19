@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "securityutils", "securityutils\securityutils.csproj", "{8853A3C0-F93D-419E-96CF-06AE3AE7C179}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SecurityUtilsSetup", "SecurityUtilsSetup\SecurityUtilsSetup.vdproj", "{6C77EE73-B832-429A-9671-E3ED57609449}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pinblock", "pinblock\pinblock.csproj", "{40706096-2A68-4546-A1DE-9DDA571326BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Debug|Any CPU.ActiveCfg = Release|x64
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Debug|Any CPU.Build.0 = Release|x64
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Debug|x64.ActiveCfg = Debug|x64
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Debug|x64.Build.0 = Debug|x64
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Debug|x86.ActiveCfg = Debug|x86
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Debug|x86.Build.0 = Debug|x86
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Release|x64.ActiveCfg = Release|x64
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Release|x64.Build.0 = Release|x64
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Release|x86.ActiveCfg = Release|x86
+		{8853A3C0-F93D-419E-96CF-06AE3AE7C179}.Release|x86.Build.0 = Release|x86
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Debug|Any CPU.ActiveCfg = Debug
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Debug|x64.ActiveCfg = Debug
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Debug|x86.ActiveCfg = Debug
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Release|Any CPU.ActiveCfg = Release
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Release|x64.ActiveCfg = Release
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Release|x64.Build.0 = Release
+		{6C77EE73-B832-429A-9671-E3ED57609449}.Release|x86.ActiveCfg = Release
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Debug|x64.ActiveCfg = Debug|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Debug|x86.ActiveCfg = Debug|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Debug|x86.Build.0 = Debug|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Release|Any CPU.ActiveCfg = Release|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Release|x64.ActiveCfg = Release|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Release|x86.ActiveCfg = Release|x86
+		{40706096-2A68-4546-A1DE-9DDA571326BF}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

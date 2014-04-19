@@ -1,0 +1,160 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html>
+<head>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<style type="text/css">
+.add-large {
+ height: 32px !important;
+ padding: 11px 19px !important;
+}
+.card_div {
+ background: #fff url('img/card.png') no-repeat fixed center; 
+}
+.input-large {
+  width: 320px;
+  height: 32px !important;
+  margin-bottom: 10px !important;
+  line-height: 30px !important;
+  padding: 11px 19px !important;
+  font-size: 28px !important;
+}
+.input-prepend,
+.input-append {
+display: inline-block;
+*display: inline;
+margin-bottom: 0;
+}
+</style>
+<!--[if IE 7]>
+<style type="text/css">
+.add-large {
+ margin-top:1px;
+}
+</style>
+<![endif]-->
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery.placeholder.min.js"></script> 
+<script>
+var transferTarget = "810";
+function process() {
+	if ( $("#cardall").hasClass("success") ) {
+		if ( window.external ) {
+			var c = window.external.GetActivePhoneCall;
+			c.Property("CardNumber") = formatCardNumber($("#card").val(),0); 
+			if ( c.CallState!=3 ) {
+				c.BlindTransfer(transferTarget);
+			}
+		} else {
+			alert( formatCardNumber($("#card").val(),0) );
+		}
+	}
+	
+}
+
+function formatCardNumber( txt,group ) {
+	var res = "";
+	var nums = 0;
+	for( var i=0;i<txt.length;++i) {
+		var ch = txt.charAt(i);
+		if ( ch>='0' && ch<='9' ) {
+			if ( nums && group && nums%group==0 ) {
+				res = res + ' ';
+			}
+			res = res + ch;
+			nums++;
+		}
+	}
+	return res;
+}
+var changing = false;
+$(document).ready(function() {
+$('input').placeholder();
+$('#card').bind('input propertychange', function() {
+    if ( changing ) return;
+    changing = true;	
+    var origVal = $(this).val();	
+    var newVal = formatCardNumber(origVal,4);
+    if ( origVal!=newVal ) {	
+    	$(this).val( newVal );
+    }	
+    	var nnn = formatCardNumber(origVal,0);
+	if (nnn.length<16 || !is_luhn_valid(nnn)) {			
+		$("#cardall").removeClass("success");
+		if (nnn.length==16) { 
+			$("#cardall").addClass("error");
+		} else {
+			$("#cardall").removeClass("error");
+		}
+		$("#ok").addClass("disabled");
+	} else {
+		$("#cardall").removeClass("error");
+		$("#cardall").addClass("success");
+		$("#ok").removeClass("disabled");
+	}
+	var img =  getImage(nnn);
+	var curimg = $("#cardimg").attr("src");
+	var idx = curimg.lastIndexOf( "/" );
+	if ( curimg.substr(idx+1)!=img ) {
+		$("#cardimg").attr("src",curimg.substr(0,idx+1) + img);		
+	}	
+     changing = false;	
+});
+$("#ok").click( process );
+
+$('#card').bind("keypress", function(e) {
+if (e.keyCode == 13) {
+	process();
+}
+});	
+
+});
+
+function luhn_checksum(digits) {
+    var checksum = 0;
+    for(var i=0;i<digits.length;++i) {
+	var n = Number(digits.charAt(i))*(2-i%2);
+    	checksum += n>9?(n%10)+1:n;
+    }
+    return checksum % 10
+}
+ 
+function is_luhn_valid(card_number){
+    return luhn_checksum(card_number) == 0;
+}
+
+function getImage(num) {
+	var cards = [ 
+		{ "img":"electron.png", "nums":[4026, 417500, 4405, 4508, 4844, 4913, 4917] }
+		,{ "img":"amex.png", "nums":[34,37] }
+		,{ "img":"maestro.png", "nums":[5018, 5020, 5038, 5893, 6304, 6759, 6761, 6762, 6763, "0604"] }
+		,{ "img":"master.png", "nums":[51,52,53,54,55] }
+		,{ "img":"visa.png", "nums":[4] }
+	];
+	if ( num ) {
+		for( var i =0;i<cards.length;++i ) {
+			var c = cards[i];
+			for( var j=0;j<c.nums.length;++j) {
+				var n = new String(c.nums[j]);
+				if ( num.indexOf(n)==0 ) {
+					return c.img;					
+				}
+			}
+		}		
+	}
+	return "card.png";	
+}
+</script>
+<title>Сменить ПИН код</title>
+</head>
+<body >
+<div style="position: fixed; width:360px; height=100px; top:50%;left:50%; margin-left:-180px; margin-top:-50px;">
+<form>
+<div class="control-group" id="cardall">
+  <div class="input-prepend">
+    <span class="add-on add-large"><img id="cardimg" src="img/card.png" /></span><input id="card" class="input-large" type="text" placeholder="Номер карты" maxlength="19">
+  </div>
+</div>
+  <div style="width: 80px; margin: 0 auto;"><a id="ok" class="btn btn-success btn-large disabled" href="#" style="width: 80px;" ><i class="icon-ok icon-large icon-white"></i> OK</a></div>
+</form>
+</div>
+</body>
+</html>
