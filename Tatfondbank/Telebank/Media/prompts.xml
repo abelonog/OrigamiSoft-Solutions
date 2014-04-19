@@ -78,6 +78,22 @@
 	</language>
 </mr-file>
 
+<mr-file id="RegisterNewPrivateOffice">
+	<language langid = "0x419">
+        	<file>RegisterNewPrivateOffice.wav</file>
+		<display-name>Введите последние 4 цифры номера Вашей карты или 14 цифр номера Вашего кредитного договора</display-name>
+		<description>Введите последние 4 цифры номера Вашей карты или 14 цифр номера Вашего кредитного договора</description>
+	</language>
+</mr-file>
+
+<mr-file id="RegistrationTechnicalIssue">
+	<language langid = "0x419">
+        	<file>RegistrationTechnicalIssue.wav</file>
+		<display-name>По техническим причинам регистрация невозможна. Попробуйте посторить попытку позже</display-name>
+		<description>По техническим причинам регистрация невозможна. Попробуйте посторить попытку позже</description>
+	</language>
+</mr-file>
+
 <mr-file id="EnterCardDigits">
 	<language langid = "0x419">
         	<file>EnterCardDigits.wav</file>

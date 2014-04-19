@@ -1,5 +1,5 @@
 var constants = {
-	"absMode":"real", //possible values = real|fake_single|fake_multi
+	"absMode":"fake_multi", //possible values = real|fake_single|fake_multi
 	"absURL": "http://delphin/UBS_ASP/esm/esm_get_data_bss.asp",
 //	"absURL": "http://algea/ubs_asp/esm/esm_get_data_bss.asp",
 	"absidseed":0,
@@ -106,8 +106,13 @@ var constants = {
 			"prepend":"7"
 		},
 	],
-	"mobilePrefixes": [ "79", "7495" ] //if 79 is not precise enough - just replace it with list like "7926","7916",....
+	"mobilePrefixes": [ "79", "7495" ], //if 79 is not precise enough - just replace it with list like "7926","7916",....
+	"creditContractIDLength":"14",
+	"enterContractIDTimeout":"45"
 };
+var IS_MOCKUPS_ON=true; //Enable and disable mockups to ignore 3d parties system connectivity. 
+						//This scrip will not send request outside whenIS_MOCKUPS_ON=true
+
 String.prototype.lpad = function(padString, length) {
 	var str = this;
     while (str.length < length)
@@ -180,18 +185,22 @@ function TFBConsultant() {
 }
 
 function PlayAndRegister() {
-	PlayTFB("RegisterInfo");
-	Register();
-}
-
-function Register() {
+	trace("PlayAndRegister1");
 	var attempts = constants.registerAttempts;
 	while( attempts-- ) {
 		if ( attempts!=constants.registerAttempts-1) {
 			PlayTFB("WrongData");
 			PlayTFB("RepeatAttempt");
 		}
-		var card = PlayAndCollectTFB("EnterCardDigits",constants.cardLength, constants.registerTimeout);	
+	
+		//var card = PlayAndCollectTFB("RegisterNewPrivateOffice",constants.creditContractIDLength, constants.enterContractIDTimeout);	
+		
+		//4 - last digit on credit card
+		//14 - credit contract id
+		var len = [4,14];
+		
+		var card = PlayAndCollectValuesTFB("RegisterNewPrivateOffice", len, 5, 4, "#");
+		
 		if ( card.length<constants.cardLength ) {
 			continue;
 		}
@@ -203,12 +212,12 @@ function Register() {
 		if ( num.length<constants.passportNumLen ) {
 			continue;
 		}
-		var res = abs.getUserGuid( card, series +  num );
+		var res = abs.getUserGuid( card, "" + series + num );
 		if ( res.code == 6 ) {
 			continue;
 		}
 		if ( res.code == 0 ) {
-			ChoosePassword( res.GUID_CLIENT, card, series+num );
+			ChoosePassword( res.GUID_CLIENT, card, "" + series + num );
 			return;			
 		}
 		SendEmail( { "code" : res.code, "request": "GET_GUID_CLIENT" } );
@@ -477,7 +486,6 @@ function MenuTFB( msg, choices, attemptsIn ) {
 		 	return ret;
 		}
 	}
-	
 }
 
 function GetVPBXCall( ) {
@@ -514,6 +522,69 @@ function PlayAndCollectTFB( msg, len, timeout ) {
 	var ret = PlayAndCollect( GetTFBPrompt( msg ) , len );
 	if ( timeout ) {
 		CollectSettings.FirstDigitTimeout = oldTimeout;
+	}
+	return ret;
+}
+/*
+message - AVR file
+lengths - массив размеров, ожидаемых чисел
+timeout - таймаут на ввод первого числа
+terminatingDigits - символ окончания ввода
+*/
+function PlayAndCollectValuesTFB( message, lengths, timeout, nextDigitTimeout, terminatingDigits ) {
+	var oldTimeout;
+	var oldNextDigitTimeout;
+	var buffer = "";
+	var ret = "";
+	var digit;
+	var doNext = true;
+	var attempts = Math.max.apply(Math, lengths); //max attempts is max value from array [lengths]
+	
+	if ( timeout ) {
+		oldTimeout = CollectSettings.FirstDigitTimeout;
+		CollectSettings.FirstDigitTimeout = timeout;
+	}
+
+	if ( nextDigitTimeout ) {
+		oldNextDigitTimeout = CollectSettings.NextDigitTimeout;
+		CollectSettings.NextDigitTimeout = nextDigitTimeout;
+	}
+	
+	PlayTFB(message);
+	
+	while(doNext){
+		attempts--;
+		digit = PlayAndCollect( null , "1" );
+		//trace("digit: " + digit);
+		if(digit == "" || digit == terminatingDigits || attempts <= 0){
+			//сивмол окончания ввода или таймаут
+			doNext = false;
+			//trace("END");
+		}else{
+			//символ числа
+			doNext = true;
+			buffer += digit;
+			//trace("buffer: "+buffer);
+		}		
+	}
+	
+	//проверить buffer на совпадение ожидаемой длины
+	for(var len in lengths){
+		trace("len: "+lengths[len]);
+		trace("buffer.length: "+buffer.length);
+		//закончить если дина совпадает и 
+		//( максимальная длина достигнута или встретился маркер окончания ввода )
+		if(!doNext && buffer.length == lengths[len]){
+			ret = buffer;
+			break;
+		}
+	}	
+	//trace("ret: "+ret);
+	if ( timeout ) {
+		CollectSettings.FirstDigitTimeout = oldTimeout;
+	}
+	if ( nextDigitTimeout ) {
+		CollectSettings.FirstDigitTimeout = oldNextDigitTimeout;
 	}
 	return ret;
 }
