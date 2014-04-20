@@ -1,5 +1,5 @@
 var constants = {
-	"absMode":"fake_multi", //possible values = real|fake_single|fake_multi
+	"absMode":"fake_single", //possible values = real|fake_single|fake_multi
 	"absURL": "http://delphin/UBS_ASP/esm/esm_get_data_bss.asp",
 //	"absURL": "http://algea/ubs_asp/esm/esm_get_data_bss.asp",
 	"absidseed":0,
@@ -113,6 +113,7 @@ var constants = {
 var IS_MOCKUPS_ON=true; //Enable and disable mockups to ignore 3d parties system connectivity. 
 						//This scrip will not send request outside whenIS_MOCKUPS_ON=true
 
+						
 String.prototype.lpad = function(padString, length) {
 	var str = this;
     while (str.length < length)
@@ -172,7 +173,7 @@ function TFBConsultant() {
 					PlayAndRegister();
 				} break;
 				case "3":{
-					Register();
+					PlayAndRegister();
 				} break;
 				default: //#attempts limit + #
 					Branch = constants.branches.router;
@@ -193,15 +194,15 @@ function PlayAndRegister() {
 			PlayTFB("RepeatAttempt");
 		}
 	
-		//var card = PlayAndCollectTFB("RegisterNewPrivateOffice",constants.creditContractIDLength, constants.enterContractIDTimeout);	
+		//var cardOrConctractID = PlayAndCollectTFB("RegisterNewPrivateOffice",constants.creditContractIDLength, constants.enterContractIDTimeout);	
 		
 		//4 - last digit on credit card
 		//14 - credit contract id
 		var len = [4,14];
 		
-		var card = PlayAndCollectValuesTFB("RegisterNewPrivateOffice", len, 5, 4, "#");
+		var cardOrConctractID = PlayAndCollectValuesTFB("RegisterNewPrivateOffice", len, 5, 4, "#");
 		
-		if ( card.length<constants.cardLength ) {
+		if ( cardOrConctractID.length<constants.cardLength ) {
 			continue;
 		}
 		var series = PlayAndCollectTFB("EnterPassportSeries",constants.passportSeriaLen, constants.registerTimeout);	
@@ -212,11 +213,11 @@ function PlayAndRegister() {
 		if ( num.length<constants.passportNumLen ) {
 			continue;
 		}
-		var res = abs.getUserGuid( card, "" + series + num );
-		if ( res.code == 6 ) {
+		var res = abs.getUserGuid( cardOrConctractID, "" + series + num );
+		trace("getUserGuid: "+res.code);
+		if ( res.code != 0 ) {
 			continue;
-		}
-		if ( res.code == 0 ) {
+		}else {
 			ChoosePassword( res.GUID_CLIENT, card, "" + series + num );
 			return;			
 		}
@@ -239,7 +240,7 @@ function ChoosePassword( guid, card, passp ) {
 			continue;
 		}
 		var phone = GetCallerID();
-		var userInfo  = GetUserInfo(  GetPasswordHash( pwd, phone ), guid );
+		var userInfo  = GetUserInfo(GetPasswordHash( pwd, phone ), guid);
 		db.setUserInfo( phone, userInfo );
 		SendSMS( phone, pwd );
 		Main( userInfo );	
@@ -254,8 +255,7 @@ function CheckAndSendError( range, guid, res ) {
 		if ( (typeof(range)=="boolean" && range) || (res.code>=range[0] && res.code<=range[1]) ) {
 				PlayTFB("SystemUnresponsive");
 				SendEmail( {"code":res.code, "request": res.method, "guid":guid} );
-			}
-		
+			}	
 	}
 	return res.code==0;
 }
@@ -387,8 +387,14 @@ function ChangePIN( info ) {
 
 function Main( info ) {        
 	while( true ) {
-	switch( MenuTFB( "MainMenu","123#",3 ) ) {
-		case "1": { //balance
+	switch( MenuTFB( "MainMenu","1234#",3 ) ) {
+		case "1": {//loan indebtedness
+			Loan(info);
+			} break;
+		case "2": {//change password
+			ChangePassword( info );
+			} break;
+		case "3": { //balance
 			var phone = GetCallerID();
 			var attempts = db.getAttempts(phone);
 			db.setAttempts(phone, attempts+1);
@@ -406,10 +412,7 @@ function Main( info ) {
 				RequestCard( info, cards );
 			}
 			} break;
-		case "2": {//change password
-			ChangePassword( info );
-			} break;
-		case "3": {//change PIN
+		case "4": {//change PIN
 			ChangePIN( info );
 			} break;
 		case "#": {
@@ -418,6 +421,11 @@ function Main( info ) {
 		} break;
 	}
 	}
+}
+
+
+function Loan(){
+
 }
 
 function ReplacePattern( pattern, params ) {
@@ -638,24 +646,42 @@ function ABSProxy() {
 	      + pad(d.getUTCMinutes())+':'
 	      + pad(d.getUTCSeconds())+'Z'
 	}
+/*
+<?xml version="1.0" encoding="windows-1251"?>
+<x:BSMessage xmlns:x="IT_R_GET_GUID_CLIENT" Version="STD1.0" ID="IT12341234123412347" ReqDateTime="2012-10-09T10:03:17">
+<BSHead CustomerID="0" SubSys="INFRATEL"/>
+<BSRequest
+	PASSP="9201123456"
+	N="1234" />
+</x:BSMessage>
 
-
+<?xml version="1.0" encoding="windows-1251"?>
+<x:BSMessage xmlns:x="IT_A_GET_GUID_CLIENT" ID="IT12341234123412347" Version="STD1.0" AnsDateTime="2012-10-09T10:03:18.300" >
+<BSHead CustomerID="0" OutSysID="UBS" ABSMessage="" >
+<Errors >
+<m c="0" e="" />
+</Errors>
+</BSHead>
+<BSAnswer GUID_CLIENT="{CBFA3202-D473-4906-8585-44A7A47F5F20}" />
+</x:BSMessage>
+*/
 	function Query( request, params ) {
 		var now = new Date();
-		var req = '<?xml version="1.0" encoding="windows-1251"?><x:BSMessage xmlns:x="IT_R_' + request + '" Version="STD1.0" ID="' + GenerateUniqueID() + '" ReqDateTime="' + ISODateString(now) + '"><BSHead CustomerID="0" SubSys="INFRATEL"/><BSRequest  ' + Params2Attributes( params )  + ' /></x:BSMessage>'
+		var req = '<?xml version="1.0" encoding="windows-1251"?><x:BSMessage xmlns:x="IT_R_' + request +'" '
+		+ 'Version="STD1.0" ID="' + GenerateUniqueID() + '" ReqDateTime="' + ISODateString(now) + '">'
+		+ '<BSHead CustomerID="0" SubSys="INFRATEL"/>'
+		+ '<BSRequest  ' + Params2Attributes( params )  + ' /></x:BSMessage>'
 		var xmldom = new ActiveXObject("MSXML2.DOMDocument");
 		xmldom.async = false;
-		xmldom.loadXML( Post(constants.absURL,req) );
+		xmldom.loadXML(Post(constants.absURL,req));
 
 		var res = xmldom;
 		var error = res.selectSingleNode("x:BSMessage/BSHead/Errors/m");
-       		var response = JsonifyXML( res.selectSingleNode("x:BSMessage/BSAnswer") );
+       	var response = JsonifyXML(res.selectSingleNode("x:BSMessage/BSAnswer"));
 		response["code"] = Number(error.getAttribute("e"));
-		response["method"] =  request;
+		response["method"] = request;
 		return response;
 	}
-
-	
 
 	this.getUserGuid = function( cardNum, passpNum ) {
 		return Query( "GET_GUID_CLIENT", { "N":cardNum, "PASSP":passpNum } );
@@ -668,6 +694,12 @@ function ABSProxy() {
 	}
 	this.getCardBalance = function( userGuid, cardNum ) {
 		return Query( "GET_BALANCE_CARD", { "GUID_CLIENT": userGuid, "N":cardNum } );
+	}
+	this.getLoanCount = function(userGuid) {
+		return Query( "GET_LOAN_COUNT", { "GUID_CLIENT": userGuid} );
+	}
+	this.getLoanSum = function(userGuid, contractID) {
+		return Query( "GET_LOAN_SUM", { "GUID_CLIENT": userGuid, "NUM_DOC":contractID} );
 	}
 }
 
@@ -682,6 +714,13 @@ function ABSFake( many ) {
 	this.getUserGuid = function( cardNum, passpNum ) {
 		return { "method" : "GET_GUID_CLIENT", "code":0, "GUID_CLIENT":"{7F58AF95-185F-48AD-B69D-1463F847EF35}" };
 	}
+	
+	/*
+	//emulating soap fault response
+	this.getUserGuid = function( cardNum, passpNum ) {
+		return { "method" : "GET_GUID_CLIENT", "code":1, "GUID_CLIENT":"" };
+	}
+	*/
 	this.getUserCards = function( userGuid ) {
 		var cnt = (many?2:1);
 		return { "method" : "GET_CARDS_CLIENT", "code":0, "CNT_CARDS":cnt, "CARDS":[ { "N": getCards( cnt ) } ] };
