@@ -1,5 +1,5 @@
 var constants = {
-	"absMode":"fake_single", //possible values = real|fake_single|fake_multi
+	"absMode":"real", //possible values = real|fake_single|fake_multi
 	"absURL": "http://delphin/UBS_ASP/esm/esm_get_data_bss.asp",
 //	"absURL": "http://algea/ubs_asp/esm/esm_get_data_bss.asp",
 	"absidseed":0,
@@ -113,7 +113,7 @@ var constants = {
 var IS_MOCKUPS_ON=true; //Enable and disable mockups to ignore 3d parties system connectivity. 
 						//This scrip will not send request outside whenIS_MOCKUPS_ON=true
 
-						
+
 String.prototype.lpad = function(padString, length) {
 	var str = this;
     while (str.length < length)
@@ -129,7 +129,7 @@ var db = new KeyValueDB( constants.registrypath );
 
 switch( MenuTFB( "EntryMenu","12",3 ) ) {
 	case "1":
-		Play("Info");
+		PlayTFB("Info");
 		Branch = constants.branches.cards;
 		break;
 	case "2":
@@ -218,7 +218,7 @@ function PlayAndRegister() {
 		if ( res.code != 0 ) {
 			continue;
 		}else {
-			ChoosePassword( res.GUID_CLIENT, card, "" + series + num );
+			ChoosePassword( res.GUID_CLIENT, cardOrConctractID, "" + series + num );
 			return;			
 		}
 		SendEmail( { "code" : res.code, "request": "GET_GUID_CLIENT" } );
@@ -387,45 +387,78 @@ function ChangePIN( info ) {
 
 function Main( info ) {        
 	while( true ) {
-	switch( MenuTFB( "MainMenu","1234#",3 ) ) {
-		case "1": {//loan indebtedness
-			Loan(info);
+		switch( MenuTFB( "MainMenu","1234#",3 ) ) {
+			case "1": {//loan indebtedness
+					Loan(info);
 			} break;
-		case "2": {//change password
-			ChangePassword( info );
+			case "2": {//change password
+				ChangePassword( info );
 			} break;
-		case "3": { //balance
-			var phone = GetCallerID();
-			var attempts = db.getAttempts(phone);
-			db.setAttempts(phone, attempts+1);
-			if ( attempts>=constants.maxDailyAttemptsCount ) {
-				WScript.Quit( constants.branches.dailyAttempts );	
-			}
-			var res = abs.getUserCards( info.guid );
-			if ( !CheckAndSendError( [1,5], info.guid, res ) ) {
-				continue;
-			}
-			var cards = res.CARDS[0].N;
-			if ( cards.length == 1 ) {
-				SpeakBalance( cards[0].REST, cards[0].CUR );
-			} else {
-				RequestCard( info, cards );
-			}
+			case "3": { //balance
+				var phone = GetCallerID();
+				var attempts = db.getAttempts(phone);
+				db.setAttempts(phone, attempts+1);
+				if ( attempts>=constants.maxDailyAttemptsCount ) {
+					WScript.Quit( constants.branches.dailyAttempts );	
+				}
+				var res = abs.getUserCards( info.guid );
+				if ( !CheckAndSendError( [1,5], info.guid, res ) ) {
+					continue;
+				}
+				var cards = res.CARDS[0].N;
+				if ( cards.length == 1 ) {
+					SpeakBalance( cards[0].REST, cards[0].CUR );
+				} else {
+					RequestCard( info, cards );
+				}
 			} break;
-		case "4": {//change PIN
-			ChangePIN( info );
+			case "4": {//change PIN
+				ChangePIN( info );
 			} break;
-		case "#": {
-			Quit( constants.branches.router );
-			return;
-		} break;
-	}
+			case "#": {
+				Quit( constants.branches.router );
+				return;
+			} break;
+		}
 	}
 }
 
+function Loan(userGuid){
+	var res = abs.getLoanCount(userGuid);
+	if ( !CheckAndSendError([1,3], userGuid, res)) {
+		return -1; //error appears
+	}
+	
+	var contractID = 0;
+	var resLoanSum = null;
+	
+	if(res.CNT_LOAN == 1 && res.NUM_DOC != ""){
+		contractID = res.NUM_DOC;
+	}else{
+		contractID = PlayAndCollectTFB("EnterContractID",constants.creditContractIDLength, constants.registerTimeout);	
+	}	
+	
+	resLoanSum = abs.getLoanSum(userGuid, contractID);
+	if (!CheckAndSendError([1,5], userGuid, resLoanSum)) {
+		return -1; //error appears
+	}
+	
+	SpeakLoan(resLoanSum.SUM_LOAN_SALDO, resLoanSum.SUM_LOAN_PAYM, resLoanSum.SUM_LOAN_FULL, resLoanSum.CUR_LOAN);
+}
 
-function Loan(){
-
+function SpeakLoan(loanSaldo, loanPayment, loanTotal, loanCur){
+	//Остаток по кредиту на текущую дату. Сумма очередного платежа на дату. Полное досрочное погашение кредита
+	
+	PlayTFB("LoanSaldo");
+	SpeakCurrency(loanSaldo, loanCur.replace("RUB","RUR"));
+	
+	PlayTFB("LoanPayment");
+	SpeakCurrency(loanPayment, loanCur.replace("RUB","RUR"));
+	
+	if(loanTotal != null){
+		PlayTFB("LoanFull");
+		SpeakCurrency(loanTotal, loanCur.replace("RUB","RUR"));	
+	}
 }
 
 function ReplacePattern( pattern, params ) {
@@ -646,25 +679,7 @@ function ABSProxy() {
 	      + pad(d.getUTCMinutes())+':'
 	      + pad(d.getUTCSeconds())+'Z'
 	}
-/*
-<?xml version="1.0" encoding="windows-1251"?>
-<x:BSMessage xmlns:x="IT_R_GET_GUID_CLIENT" Version="STD1.0" ID="IT12341234123412347" ReqDateTime="2012-10-09T10:03:17">
-<BSHead CustomerID="0" SubSys="INFRATEL"/>
-<BSRequest
-	PASSP="9201123456"
-	N="1234" />
-</x:BSMessage>
 
-<?xml version="1.0" encoding="windows-1251"?>
-<x:BSMessage xmlns:x="IT_A_GET_GUID_CLIENT" ID="IT12341234123412347" Version="STD1.0" AnsDateTime="2012-10-09T10:03:18.300" >
-<BSHead CustomerID="0" OutSysID="UBS" ABSMessage="" >
-<Errors >
-<m c="0" e="" />
-</Errors>
-</BSHead>
-<BSAnswer GUID_CLIENT="{CBFA3202-D473-4906-8585-44A7A47F5F20}" />
-</x:BSMessage>
-*/
 	function Query( request, params ) {
 		var now = new Date();
 		var req = '<?xml version="1.0" encoding="windows-1251"?><x:BSMessage xmlns:x="IT_R_' + request +'" '
@@ -730,6 +745,17 @@ function ABSFake( many ) {
 	}
 	this.getCardBalance = function( userGuid, cardNum ) {
 		return { "method" : "GET_BALANCE_CARD", "code":0, "REST":342.22, "CUR":"RUB" };
+	}
+	
+	this.getLoanCount = function(userGuid) {
+		if(!many){
+			return { "method" : "GET_LOAN_COUNT", "code":0, "CNT_LOAN":1, "NUM_DOC":"12345678901234" };
+		}else{
+			return { "method" : "GET_LOAN_COUNT", "code":0, "CNT_LOAN":2 };
+		}
+	}
+	this.getLoanSum = function(userGuid, contractID) {
+		return {"method" : "GET_LOAN_SUM", "code":0, "SUM_LOAN_SALDO":12345.56, "SUM_LOAN_PAYM":78.90, "SUM_LOAN_FULL":123456.78, "CUR_LOAN":"RUB"};
 	}
 }
 
